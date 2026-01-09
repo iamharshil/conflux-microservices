@@ -1,0 +1,27 @@
+{
+    "name": "@conflux-microservices/auth-service",
+    "version": "1.0.0",
+    "description": "Authentication and authorization service",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "bun --watch src/index.ts",
+        "build": "bun build src/index.ts --target bun --minify --outdir ./dist",
+        "start": "bun dist/index.js",
+        "test": "bun test",
+        "type-check": "tsc --noEmit",
+        "lint": "eslint src --ext .ts",
+        "lint:fix": "eslint src --ext .ts --fix"
+    },
+    "dependencies": {
+        "elysia": "^1.4.21",
+        "jsonwebtoken": "^9.0.3",
+        "zod": "^4.3.5"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/node": "^25.0.3",
+        "@typescript-eslint/eslint-plugin": "^8.52.0",
+        "@typescript-eslint/parser": "^8.52.0",
+        "eslint": "^9.39.2"
+    }
+}

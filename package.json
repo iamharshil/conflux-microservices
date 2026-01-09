@@ -1,27 +1,52 @@
 {
 	"name": "conflux-microservices",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"description": "Business-agnostic appointment booking platform with microservices architecture",
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/iamharshil/conflux-microservices.git"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/iamharshil/conflux-microservices/issues"
-	},
-	"homepage": "https://github.com/iamharshil/conflux-microservices#readme",
-	"dependencies": {
-		"elysia": "^1.4.21"
+		"install:all": "bun install && bun run install:services",
+		"install:services": "bunx concurrently \"bun run install:auth\" \"bun run install:booking\" \"bun run install:availability\" \"bun run install:notification\"",
+		"install:auth": "cd packages/auth-service && bun install",
+		"install:booking": "cd packages/booking-service && bun install",
+		"install:availability": "cd packages/availability-service && bun install",
+		"install:notification": "cd packages/notification-service && bun install",
+		"build": "bun run build:services",
+		"build:services": "bunx concurrently \"bun run build:auth\" \"bun run build:booking\" \"bun run build:availability\" \"bun run build:notification\"",
+		"build:auth": "cd packages/auth-service && bun run build",
+		"build:booking": "cd packages/booking-service && bun run build",
+		"build:availability": "cd packages/availability-service && bun run build",
+		"build:notification": "cd packages/notification-service && bun run build",
+		"dev": "bun run dev:all",
+		"dev:all": "bunx concurrently \"bun run dev:auth\" \"bun run dev:booking\" \"bun run dev:availability\" \"bun run dev:notification\"",
+		"dev:auth": "cd packages/auth-service && bun run dev",
+		"dev:booking": "cd packages/booking-service && bun run dev",
+		"dev:availability": "cd packages/availability-service && bun run dev",
+		"dev:notification": "cd packages/notification-service && bun run dev",
+		"type-check": "bun run type-check:services",
+		"type-check:services": "bunx concurrently \"bun run type-check:auth\" \"bun run type-check:booking\" \"bun run type-check:availability\" \"bun run type-check:notification\"",
+		"type-check:auth": "cd packages/auth-service && bun run type-check",
+		"type-check:booking": "cd packages/booking-service && bun run type-check",
+		"type-check:availability": "cd packages/availability-service && bun run type-check",
+		"type-check:notification": "cd packages/notification-service && bun run type-check",
+		"test": "bun run test:services",
+		"test:services": "bunx concurrently \"bun run test:auth\" \"bun run test:booking\" \"bun run test:availability\" \"bun run test:notification\"",
+		"test:auth": "cd packages/auth-service && bun test",
+		"test:booking": "cd packages/booking-service && bun test",
+		"test:availability": "cd packages/availability-service && bun test",
+		"test:notification": "cd packages/notification-service && bun test",
+		"lint": "bun run lint:services",
+		"lint:services": "bunx concurrently \"bun run lint:auth\" \"bun run lint:booking\" \"bun run lint:availability\" \"bun run lint:notification\"",
+		"lint:auth": "cd packages/auth-service && bun run lint",
+		"lint:booking": "cd packages/booking-service && bun run lint",
+		"lint:availability": "cd packages/availability-service && bun run lint",
+		"lint:notification": "cd packages/notification-service && bun run lint"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.11",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"concurrently": "^8.2.2"
 	}
 }

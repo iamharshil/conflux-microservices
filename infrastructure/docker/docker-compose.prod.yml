@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  # Production Auth Service
+  auth-service:
+    build:
+      context: .
+      dockerfile: packages/auth-service/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    restart: unless-stopped
+
+  # Production Booking Service
+  booking-service:
+    build:
+      context: .
+      dockerfile: packages/booking-service/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
+        reservations:
+          memory: 256M
+          cpus: '0.2'
+    restart: unless-stopped
+
+  # Production Availability Service
+  availability-service:
+    build:
+      context: .
+      dockerfile: packages/availability-service/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    restart: unless-stopped
+
+  # Production Notification Service
+  notification-service:
+    build:
+      context: .
+      dockerfile: packages/notification-service/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    restart: unless-stopped
+
+  # Production Database
+  postgres:
+    environment:
+      - POSTGRES_DB=appointment_booking
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/production.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.3'
+    restart: unless-stopped
+
+  # Production Redis
+  redis:
+    volumes:
+      - redis_prod_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    restart: unless-stopped
+
+  # Production RabbitMQ
+  rabbitmq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_prod_data:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
+        reservations:
+          memory: 256M
+          cpus: '0.2'
+    restart: unless-stopped
+
+  # Production Nginx
+  nginx:
+    volumes:
+      - ./infrastructure/nginx/nginx.prod.conf:/etc/nginx/nginx.conf
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.1'
+        reservations:
+          memory: 64M
+          cpus: '0.05'
+    restart: unless-stopped
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:
+  rabbitmq_prod_data:

@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Enhanced Auth Service for development
+  auth-service:
+    build:
+      context: .
+      dockerfile: packages/auth-service/Dockerfile.dev
+    volumes:
+      - ./packages/auth-service/src:/app/src
+      - ./packages/auth-service/tsconfig.json:/app/tsconfig.json
+      - ./packages/shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+      - DEBUG=true
+    command: bun --watch src/index.ts
+    ports:
+      - "9229:9229"  # Debug port
+
+  # Enhanced Booking Service for development
+  booking-service:
+    build:
+      context: .
+      dockerfile: packages/booking-service/Dockerfile.dev
+    volumes:
+      - ./packages/booking-service/src:/app/src
+      - ./packages/booking-service/tsconfig.json:/app/tsconfig.json
+      - ./packages/shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    command: bun --watch src/index.ts
+    ports:
+      - "9230:9229"  # Debug port
+
+  # Enhanced Availability Service for development
+  availability-service:
+    build:
+      context: .
+      dockerfile: packages/availability-service/Dockerfile.dev
+    volumes:
+      - ./packages/availability-service/src:/app/src
+      - ./packages/availability-service/tsconfig.json:/app/tsconfig.json
+      - ./packages/shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    command: bun --watch src/index.ts
+    ports:
+      - "9231:9229"  # Debug port
+
+  # Enhanced Notification Service for development
+  notification-service:
+    build:
+      context: .
+      dockerfile: packages/notification-service/Dockerfile.dev
+    volumes:
+      - ./packages/notification-service/src:/app/src
+      - ./packages/notification-service/tsconfig.json:/app/tsconfig.json
+      - ./packages/shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    command: bun --watch src/index.ts
+    ports:
+      - "9232:9229"  # Debug port
+
+  # Development database with persistence and admin tools
+  postgres:
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=appointment_booking_dev
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+
+  # Redis with persistence
+  redis:
+    volumes:
+      - redis_dev_data:/data
+    command: redis-server --appendonly yes
+
+  # Development tools
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:

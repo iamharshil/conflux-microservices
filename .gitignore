@@ -1,106 +1,34 @@
-# Dependencies
+# dependencies (bun install)
 node_modules
-bun.lockb
- 
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Docker
-.dockerignore
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
+# output
+out
+dist
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
+# code coverage
+coverage
+*.lcov
 
-# parcel-bundler cache (https://parceljs.org/)
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
 .cache
-.parcel-cache
+*.tsbuildinfo
 
-# next.js build output
-.next
+# IntelliJ based IDEs
+.idea
 
-# nuxt.js build output
-.nuxt
-
-# vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# Infrastructure
-infrastructure/docker/docker-compose.local.yml
-infrastructure/nginx/ssl/
-volumes/
-postgres_data/
-redis_data/
-rabbitmq_data/
-
-# Database backups
-*.sql
-backup/
-
-# Temporary files
-tmp/
-temp/
+# Finder (MacOS) folder config
+.DS_Store
